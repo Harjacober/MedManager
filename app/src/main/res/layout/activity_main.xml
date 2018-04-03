@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.original_tech.medmanager.MainActivity">
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:layout_width= "match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:id="@+id/progress_bar"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/medication_list_view"
+            android:layout_margin="8dp"
+            tools:listitem="@layout/item_medication_list_recyclerview">
+        </ListView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No medication added yet"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/text_view"
+            android:visibility="invisible"
+            android:textColor="#691A99"/>
+    </RelativeLayout>
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/medications_lists_recyclerview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--tools:listitem="@layout/item_medication_list_recyclerview"-->
+        <!--android:layout_margin="8dp">-->
+
+    <!--</android.support.v7.widget.RecyclerView>-->
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#68EFAD"
+        android:id="@+id/add_new_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:layout_alignParentEnd="true"
+        android:onClick="onAddNewMedicationClicked"
+        android:src="@drawable/ic_add_white_24dp"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort By"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="22sp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/name_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name(A - Z)"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"/>
+        <RadioButton
+            android:id="@+id/name_asc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name(Z - A)"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"/>
+        <RadioButton
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Time(new - old)" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"/>
+    </RadioGroup>
+</LinearLayout>

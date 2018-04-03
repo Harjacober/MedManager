@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#7A1EA1">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="com.example.original_tech.medmanager.authentication.SignUpActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginBottom="24dp"
+        android:layout_gravity="center_horizontal"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp">
+
+            <EditText
+                android:id="@+id/email_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="Email Adress"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp">
+            <EditText
+                android:id="@+id/username_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp">
+        <EditText
+            android:id="@+id/password_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="Password"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp">
+            <EditText
+                android:id="@+id/c_password_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="Confirm Passsword"/>
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/sign_up_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="sign up"
+            android:onClick="onSignUpButtonClicked"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:background="#691A99"
+            android:textColor="#ffffff"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/sign_up_button">
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/forgot_pass_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Forgot Password"
+                android:onClick="onForgotPasswordClicked"
+                android:background="#691A99"
+                android:textColor="#ffffff"
+                android:layout_marginRight="5dp"
+                />
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sign In"
+                android:onClick="onSignInButtonClicked"
+                android:background="#691A99"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="5dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
+</ScrollView>
