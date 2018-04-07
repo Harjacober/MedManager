@@ -20,10 +20,6 @@ import com.example.original_tech.medmanager.utils.MedicationDateUtils;
 import com.example.original_tech.medmanager.utils.NotificationUtils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class MedicationDetailsActivity extends AppCompatActivity {
 
