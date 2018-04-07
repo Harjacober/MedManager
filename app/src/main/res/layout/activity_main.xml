@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No medication added yet"
+            android:text="@string/empty_cursoor_text"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/text_view"
@@ -45,14 +45,15 @@
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#68EFAD"
+        android:backgroundTint="#691A99"
         android:id="@+id/add_new_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:layout_alignParentEnd="true"
         android:onClick="onAddNewMedicationClicked"
-        android:src="@drawable/ic_add_white_24dp"/>
+        android:src="@drawable/ic_add_white_24dp"
+        tools:targetApi="lollipop" />
 
 
 </RelativeLayout>

@@ -7,15 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,29 +25,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.original_tech.medmanager.adapters.MedicationDiaplayAdapter;
 import com.example.original_tech.medmanager.authentication.UserProfileActivity;
 import com.example.original_tech.medmanager.data.MedicationContract;
-import com.example.original_tech.medmanager.sync.ReminderTask;
-import com.example.original_tech.medmanager.utils.NotificationUtils;
 import com.example.original_tech.medmanager.utils.ReminderUtilities;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+import java.sql.Timestamp;
+
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+AdapterView.OnItemSelectedListener{
 
     private ProgressBar mLoadIndicator;
     private MedicationDiaplayAdapter mDisplayAdapter;
     private ListView mListView;
     private static final int PRODUCT_LOADER = 0;
-    public static final String KEY_NAME = "name";
-    public static final String KEY_DESC = "description";
     public static final String KEY_INTERVAL = "interval";
-    private static final String PREF_KEY = "sort_key";
-    private static final String PREF_NAME = "sort_order";
+    private static final String PREF_KEY = "sort-key";
+    private static final String PREF_NAME = "sort-order";
+    private static final String PREF_CATEGORY = "month-category";
+    private static final String PREF_MONTH = "month-key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +69,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getSupportLoaderManager().initLoader(PRODUCT_LOADER,null,this);
 
         setListViewListener();
-        ReminderUtilities.scheduleMedicationReminder(this, 4, new Bundle());
+        //This method will be removed, it's just to test that the job scheduler is working fine
+        ReminderUtilities.scheduleMedicationReminder(this, 8640, 10000, new Bundle());
     }
 
     public void onAddNewMedicationClicked(View view) {
+        startAddNewMedActivity();
+    }
+
+    private void startAddNewMedActivity() {
         Intent intent = new Intent(this, AddNewMedActivity.class);
         startActivity(intent);
     }
@@ -75,6 +87,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
 
+        //Set up Spinner
+        MenuItem item = menu.findItem(R.id.spinner);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.monthsList, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+        //Search View
         SearchManager searchManager = (SearchManager)
                 getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView)
@@ -96,8 +118,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             startActivity(intent);
         }else if(id == R.id.sort_by){
             createDialog();
+        }else if(id == R.id.delete_all_med) {
+            deleteAllMedications();
+        }else if(id == R.id.add_medication) {
+            startAddNewMedActivity();
+        }else if(id == R.id.delete_due_med) {
+            new DeleteDueMedicationFromDb().execute();
         }
         return true;
+    }
+
+    private void deleteAllMedications() {
+        getContentResolver().delete(MedicationContract.MedicationEntry.CONTENT_URI,
+                null,
+                null);
     }
 
     public void setListViewListener(){
@@ -116,7 +150,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private void createDialog(){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(
+                new ContextThemeWrapper(this,
+                        R.style.DialogTheme));
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dia_sort_med_list, null);
         final RadioButton nameDescending = view.findViewById(R.id.name_desc);
@@ -153,11 +189,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 SharedPreferences prefs = getSharedPreferences(PREF_NAME, 0);
                 String order = prefs.getString(PREF_KEY, null);
                 Log.i("mmmmmmmmm", order);
+                getSupportLoaderManager().restartLoader(PRODUCT_LOADER,null,MainActivity.this);
             }
         });
 
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, 0);
-        String order = prefs.getString(PREF_KEY, null);
+        String order = prefs.getString(PREF_KEY, "");
         if (order.equals("nameAsc")){
             nameAscending.setChecked(true);
         }else if (order.equals("nameDesc")){
@@ -175,29 +212,51 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String[] projection={MedicationContract.MedicationEntry._ID,
                 MedicationContract.MedicationEntry.COLUMN_MED_NAME,
                 MedicationContract.MedicationEntry.COLUMN_MED_DESC,
-                MedicationContract.MedicationEntry.COLUMN_MED_INTERVAL};
+                MedicationContract.MedicationEntry.COLUMN_MED_INTERVAL,
+                MedicationContract.MedicationEntry.COLUMN_MONTH,
+                MedicationContract.MedicationEntry.COLUMN_IMAGE };
+        //Sort Order specified by the sort by in the overflow menu
         String sortOrder;
         SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, 0);
         String order = sharedPreferences.getString(PREF_KEY, "time");
-        Log.i("lllllllllll", order);
-        if (order.equals("nameAsc")){
-            sortOrder = MedicationContract.MedicationEntry.COLUMN_MED_NAME + " ASC";
-        }else if (order.equals("nameDesc")){
-            sortOrder = MedicationContract.MedicationEntry.COLUMN_MED_NAME + " DESC";
-        }else{
-            sortOrder = null;
+
+        switch (order) {
+            case "nameAsc":
+                sortOrder = MedicationContract.MedicationEntry.COLUMN_MED_NAME + " ASC";
+                break;
+            case "nameDesc":
+                sortOrder = MedicationContract.MedicationEntry.COLUMN_MED_NAME + " DESC";
+                break;
+            default:
+                sortOrder = null;
+                break;
         }
+
+        //Where and where args specified by the spinner at the action bar
+        String selection;
+        String[] selectionArgs;
+        SharedPreferences preferences = getSharedPreferences(PREF_CATEGORY, 0);
+        String selectedMonth = preferences.getString(PREF_MONTH, "");
+        if (selectedMonth.equals("All")){
+            selection = null;
+            selectionArgs = null;
+        }else {
+            selection = MedicationContract.MedicationEntry.COLUMN_MONTH + "=?";
+            selectionArgs = new String[] {selectedMonth};
+        }
+
         return new CursorLoader(this,
                 MedicationContract.MedicationEntry.CONTENT_URI,
                 projection,
-                null,
-                null,
+                selection,
+                selectionArgs,
                 sortOrder);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mDisplayAdapter.swapCursor(data);
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+//        new DeleteDueMedicationFromDb().execute(cursor);
+        mDisplayAdapter.swapCursor(cursor);
     }
 
     @Override
@@ -205,4 +264,54 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mDisplayAdapter.swapCursor(null);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        String monthSelectedFromSpinner = String.valueOf(adapterView.getItemAtPosition(position));
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_CATEGORY, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PREF_MONTH, monthSelectedFromSpinner);
+        editor.commit();
+        getSupportLoaderManager().restartLoader(PRODUCT_LOADER,null,this);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    class DeleteDueMedicationFromDb extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            long currentTime = System.currentTimeMillis();
+            long endDateInMillis;
+            Cursor cursor = getContentResolver().query(MedicationContract.MedicationEntry.CONTENT_URI,
+                    new String[] {MedicationContract.MedicationEntry.COLUMN_END_DATE},
+                    null,
+                    null,
+                    null);
+            if (cursor != null) {
+                cursor.moveToNext();
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    endDateInMillis = Long.parseLong(cursor.getString(
+                            cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_END_DATE)));
+                    if (new Timestamp(endDateInMillis).before(new Timestamp(currentTime))
+                            || new Timestamp(currentTime).equals(new Timestamp(endDateInMillis))) {
+                        getApplicationContext().getContentResolver().delete(
+                                MedicationContract.MedicationEntry.CONTENT_URI,
+                                MedicationContract.MedicationEntry.COLUMN_END_DATE + "=?",
+                                new String[]{String.valueOf(endDateInMillis)});
+                    }
+                    cursor.moveToNext();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void  avoid) {
+            Toast.makeText(MainActivity.this, "Due Medications has been removed",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 }

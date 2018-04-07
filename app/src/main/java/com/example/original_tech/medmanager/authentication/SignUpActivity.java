@@ -3,17 +3,18 @@ package com.example.original_tech.medmanager.authentication;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.original_tech.medmanager.R;
+import com.example.original_tech.medmanager.SplashActivity;
+import com.example.original_tech.medmanager.utils.NetworkUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,10 +26,11 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText mPassword;
     private EditText mConfirmPassword;
     private EditText mUSername;
-    private Button mSignIn;
+    private TextView mSignIn;
     private Button mSignUp;
     private Button mForgotPassword;
     private FirebaseAuth mAuth;
+    private boolean check = false;
 
 
     @Override
@@ -44,7 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
         mUSername = findViewById(R.id.username_field);
         mSignIn = findViewById(R.id.sign_in_button);
         mSignUp = findViewById(R.id.sign_up_button);
-        mForgotPassword = findViewById(R.id.forgot_pass_button);
+//        mForgotPassword = findViewById(R.id.forgot_pass_button)
 
         //Check if Intent has extras
         Intent intent = getIntent();
@@ -54,15 +56,18 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    public void onSignInButtonClicked(View view) {
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (check == true) {
+            SplashActivity.saveUserState(this, SplashActivity.SIGN_UP_VAL);
+        }
+    }
+
+    public void onSignInTextViewClicked(View view) {
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    public void onForgotPasswordClicked(View view) {
-        Intent intent = new Intent(this, ResetPasswordActivity.class);
-        startActivity(intent);
     }
 
     public void onSignUpButtonClicked(View view) {
@@ -79,6 +84,8 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Enter email", Toast.LENGTH_SHORT).show();
         }else if(TextUtils.isEmpty(password)){
             Toast.makeText(this, "Enter password", Toast.LENGTH_SHORT).show();
+        }else if (!NetworkUtils.isConnected(this)){
+            Toast.makeText(this, "Check your Internet Connection", Toast.LENGTH_LONG).show();
         }
         else{
             registerUser(email, password, mAuth);
@@ -99,6 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     +task.getException(), Toast.LENGTH_SHORT).show();
                         }else{
                             showProgressDialog(false);
+                            check = true;
                             Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                             startActivity(intent);
                             finish();
@@ -107,6 +115,8 @@ public class SignUpActivity extends AppCompatActivity {
                 });
 
     }
+
+
     private void showProgressDialog(boolean show){
         ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this,
                 R.style.Theme_AppCompat_DayNight_Dialog);

@@ -14,14 +14,41 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
-        <ImageView
-            android:id="@+id/med_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_margin="16dp"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark"
-            />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/med_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_person_black_24dp"
+                app:civ_border_color="#7986CB"
+                app:civ_border_width="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/image_chooser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="76dp"
+                android:background="#68EFAD"
+                android:src="@drawable/ic_camera_alt_purple_24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.591"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,45 +58,68 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:hint="Name"/>
+                android:inputType="textPersonName"
+                android:hint="@string/medication_name"/>
             <EditText
                 android:id="@+id/med_desc"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:layout_margin="8dp"
-                android:hint="Description"/>
+                android:gravity="top"
+                android:padding="8dp"
+                android:hint="@string/description"
+                android:background="#aaaaaa"/>
             <EditText
                 android:id="@+id/med_interval"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:hint="Interval"
+                android:hint="@string/interval_no_of_times_a_day"
                 android:inputType="number"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/med_start_date"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:inputType="none"
+                    android:hint="@string/start_date" />
+                <EditText
+                    android:id="@+id/med_end_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="8dp"
+                    android:inputType="none"
+                    android:editable="false"
+                    android:hint="@string/end_date"/>
+        </LinearLayout>
             <EditText
-                android:id="@+id/med_start_date"
+                android:id="@+id/med_pref_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:hint="Start Date"
-                />
-            <EditText
-                android:id="@+id/med_end_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="End Date"/>
+                android:inputType="none"
+                android:onClick="onPrefTimeClicked"
+                android:hint="@string/preferred_start_time"/>
         </LinearLayout>
     </LinearLayout>
     </ScrollView>
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#68EFAD"
-        android:layout_gravity="right"
+        android:backgroundTint="#691A99"
+        android:layout_gravity="end"
         android:layout_margin="16dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:onClick="onFabDoneClicked"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_done_white_24dp"/>
+        android:src="@drawable/ic_done_white_24dp"
+        tools:targetApi="lollipop" />
+
 </RelativeLayout>

@@ -25,6 +25,8 @@ public class MedicationContract {
         public static final String COLUMN_END_DATE = "end_date";
         public static final String COLUMN_PREF_START_TIME = "pref_start_time";
         public static final String UNIQUE_ID = "unique_id";
+        public static final String COLUMN_IMAGE="image";
+        public static final String COLUMN_MONTH="month";
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(TABLE_NAME).build();
 

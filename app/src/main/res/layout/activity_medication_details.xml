@@ -20,7 +20,7 @@
 
     <FrameLayout
         android:id="@+id/frame_layout2"
-        android:layout_width="381dp"
+        android:layout_width="match_parent"
         android:layout_height="160dp"
         android:layout_marginTop="176dp"
         android:background="#68EFAD"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textSize="22sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/view2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView7"
@@ -47,11 +47,11 @@
         android:id="@+id/med_interval"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toStartOf="@+id/med_days_used"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/med_start_date"
-        android:text="3"
+        tools:text="3"
         android:textColor="#691A99"/>
     <TextView
 
@@ -60,9 +60,9 @@
         app:layout_constraintEnd_toStartOf="@+id/med_days_used"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/med_interval"
-        android:text="times a day" />
+        android:text="@string/times_a_day" />
 
-    <view
+    <View
         android:id="@+id/view2"
         android:layout_width="1dp"
         android:layout_height="70dp"
@@ -76,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textSize="22sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view2"
         app:layout_constraintTop_toBottomOf="@id/textView8"
@@ -87,11 +87,11 @@
         android:id="@+id/med_days_remaining"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/med_days_used"
         app:layout_constraintTop_toBottomOf="@id/med_end_date"
-        android:text="32"
+        tools:text="32"
         android:textColor="#691A99"/>
     <TextView
         android:layout_width="wrap_content"
@@ -99,18 +99,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/med_days_used"
         app:layout_constraintTop_toBottomOf="@id/med_days_remaining"
-        android:text="days remaining" />
+        android:text="@string/days_remaining" />
+
     <TextView
         android:id="@+id/med_days_used"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="22sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#691A99"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/med_end_date"
-        android:text="14"
-        android:textColor="#691A99"/>
+        tools:text="14" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -118,17 +119,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/med_days_used"
-        android:text="days used" />
+        android:text="@string/days_used" />
 
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Start Date"
+        android:text="@string/start_date"
         app:layout_constraintEnd_toStartOf="@+id/view2"
         app:layout_constraintStart_toStartOf="@+id/frame_layout2"
         app:layout_constraintTop_toBottomOf="@id/frame_layout" />
@@ -138,7 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="End Date"
+        android:text="@string/end_date"
         app:layout_constraintEnd_toEndOf="@+id/frame_layout2"
         app:layout_constraintStart_toEndOf="@+id/view2"
         app:layout_constraintTop_toBottomOf="@id/frame_layout" />
@@ -157,19 +156,19 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/med_desc"
+        android:id="@+id/textview0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:text="Description"
+        android:text="@string/description"
         android:textColor="#ffffff"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="@+id/frameLayout"
         app:layout_constraintTop_toBottomOf="@+id/frame_layout2" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/med_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="TextView ueyh ujhut eturt tgrri gyire rijrit reitrit tirtir
@@ -177,28 +176,33 @@ jrjr rrthr rtjeri erjre grkw rir dgjrr ktit huirtr rhrtguthg rgihjgri
 jjrtgjtr rjtrtr rgjhrt rtjhrtrt tjhrtr kthje3 whgw rkjrt kjw wjww
 bdgr dtjr dtr we3wher rektjrt wjw rjtjw rir krr tktjr wjhri4r
 jmdg kjwhw glkhg ehe gklj whwb glr sbs glkgj syhre kjgr."
+        android:layout_marginLeft="8dp"
         android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="@+id/frameLayout"
         app:layout_constraintStart_toStartOf="@+id/frameLayout"
-        app:layout_constraintTop_toBottomOf="@+id/med_desc" />
+        app:layout_constraintTop_toBottomOf="@+id/textview0"
+        android:layout_marginStart="8dp" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/med_image"
         android:layout_width="110dp"
         android:layout_height="110dp"
+        app:civ_border_color="#7986CB"
+        app:civ_border_width="1dp"
+        android:layout_marginTop="16dp"
+        app:civ_circle_background_color="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
-        app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+        android:src="@drawable/ic_person_black_24dp" />
 
     <TextView
         android:id="@+id/med_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintTop_toBottomOf="@id/med_image"
         tools:text="Name Of Medication"
         android:textColor="#ffffff"
         android:textSize="18sp"/>

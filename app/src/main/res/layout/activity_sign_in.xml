@@ -71,7 +71,7 @@
             android:layout_marginBottom="12dp"
             android:padding="12dp"
             android:textStyle="bold"
-            android:text="SIGN IN"
+            android:text="@string/action_sign_in_short"
             android:background="#691A99"
             android:textColor="#ffffff"/>
 
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="16sp"
-            android:text="or Sign in With Google"
+            android:text="@string/or_sign_in_with_google"
             android:textColor="#ffffff"/>
 
         <com.google.android.gms.common.SignInButton
@@ -89,16 +89,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp"
-            android:textStyle="bold" />
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold"
+            android:onClick="OnGoogleSignInClicked"/>
 
+        <TextView
+            android:id="@+id/forgot_pass_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/forgot_password"
+            android:layout_marginBottom="8dp"
+            android:onClick="onForgotPasswordClicked"
+            android:textColor="#ffffff"
+            />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:textSize="16sp"
-            android:text="No account yet?  Create one"
+            android:text="@string/prompt_create_new_acct"
             android:textColor="#ffffff"
             android:onClick="onCreateOneClicked"/>
 

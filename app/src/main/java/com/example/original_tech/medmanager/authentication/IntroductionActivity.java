@@ -1,15 +1,14 @@
 package com.example.original_tech.medmanager.authentication;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
-import com.example.original_tech.medmanager.MainActivity;
 import com.example.original_tech.medmanager.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,7 +21,7 @@ public class IntroductionActivity extends AppCompatActivity implements View.OnCl
 
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 0;
-    private static final String TAG = "errrrrrrrrrrr";
+    private static final String TAG = "IntroActivity-class";
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -71,18 +70,18 @@ public class IntroductionActivity extends AppCompatActivity implements View.OnCl
             // The Task returned from this call is always completed, no need to attach
             // a listener
             @SuppressLint("RestrictedApi") Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            handleSignInResult(task, this, SignUpActivity.class);
         }
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    public static void handleSignInResult(Task<GoogleSignInAccount> completedTask, Context context, Class c) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             // Signed in successfully, show authenticated UI.
             //updateUI(account);
-            Intent intent = new Intent(this, SignUpActivity.class);
+            Intent intent = new Intent(context, c);
             intent.putExtra("email", account.getEmail());
-            startActivity(intent);
+            context.startActivity(intent);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -94,18 +93,18 @@ public class IntroductionActivity extends AppCompatActivity implements View.OnCl
     private void updateUI(GoogleSignInAccount account) {
         if (account != null){
             Toast.makeText(this, "You are not signed in yet", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void onNewUserClicked(View view) {
         Intent newIntent = new Intent(this, SignUpActivity.class);
         startActivity(newIntent);
+        finish();
     }
 
     public void onAlreadyRegistered(View view) {
         Intent registeredIntent = new Intent(this, SignInActivity.class);
         startActivity(registeredIntent);
+        finish();
     }
 }

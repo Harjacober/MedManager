@@ -17,14 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:contentPadding="16dp"
+            app:contentPadding="10dp"
             android:onClick="onNewUserClicked">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="New User?"
+                android:text="@string/new_user"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#691A99"/>
@@ -33,7 +33,7 @@
             android:id="@+id/already_registered_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="10dp"
             app:contentPadding="16dp"
             android:onClick="onAlreadyRegistered">
             <TextView
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Already Registered?"
+                android:text="@string/already_registered"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#691A99"/>
@@ -50,7 +50,7 @@
             android:id="@+id/sign_in_button"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginTop="16dp"
             android:textStyle="bold" />
     </LinearLayout>

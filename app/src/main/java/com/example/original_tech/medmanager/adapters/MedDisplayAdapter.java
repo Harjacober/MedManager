@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.original_tech.medmanager.MainActivity;
 import com.example.original_tech.medmanager.R;
+import com.example.original_tech.medmanager.data.SearchResultActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +24,7 @@ public class MedDisplayAdapter extends RecyclerView.Adapter<MedDisplayAdapter.Vi
 
 
     public interface ListItemCLickListener{
-        void onItemCLickListener(int clickedItemIndex);
+        void onItemCLickListener(String clickedItemUniqueId);
     }
     private ListItemCLickListener mlistener;
     private ArrayList<JSONObject> data;
@@ -68,14 +69,15 @@ public class MedDisplayAdapter extends RecyclerView.Adapter<MedDisplayAdapter.Vi
         }
 
         public void bind(int position) throws JSONException{
-            medName.setText(data.get(position).getString(MainActivity.KEY_NAME));
-            medDescription.setText(data.get(position).getString(MainActivity.KEY_DESC));
+            medName.setText(data.get(position).getString(SearchResultActivity.KEY_NAME));
+            medDescription.setText(data.get(position).getString(SearchResultActivity.KEY_DESC));
             medInterval.setText(data.get(position).getString(MainActivity.KEY_INTERVAL));
+            final String uniqueId = data.get(position).getString(SearchResultActivity.UNIQUE_ID);
             //When the cardView of each medication is clicked
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mlistener.onItemCLickListener(getAdapterPosition());
+                    mlistener.onItemCLickListener(uniqueId);
                 }
             });
         }

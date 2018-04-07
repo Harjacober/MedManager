@@ -1,9 +1,7 @@
 package com.example.original_tech.medmanager.services;
 
-import android.annotation.TargetApi;
 import android.content.Context;;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -22,6 +20,11 @@ public class MedicationReminderFirebaseJobService extends JobService {
     public boolean onStartJob(final JobParameters jobParameters) {
         Toast.makeText(this, "Task Started", Toast.LENGTH_SHORT).show();
         mBackgroundTask = new AsyncTask() {
+            @Override
+            protected void onPreExecute() {
+                Toast.makeText(getApplicationContext(), "Task Started", Toast.LENGTH_SHORT).show();
+            }
+
             @Override
             protected Object doInBackground(Object[] objects) {
                 Bundle bundle = jobParameters.getExtras();

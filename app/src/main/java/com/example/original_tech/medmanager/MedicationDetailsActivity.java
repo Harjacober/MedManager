@@ -2,19 +2,28 @@ package com.example.original_tech.medmanager;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.original_tech.medmanager.R;
 import com.example.original_tech.medmanager.data.MedicationContract;
 import com.example.original_tech.medmanager.utils.MedicationDateUtils;
 import com.example.original_tech.medmanager.utils.NotificationUtils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class MedicationDetailsActivity extends AppCompatActivity {
 
@@ -24,6 +33,8 @@ public class MedicationDetailsActivity extends AppCompatActivity {
     private TextView mMedInterval;
     private TextView mMedStartDate;
     private TextView mMedEndDate;
+    private TextView mMedDaysUsed;
+    private TextView mMedDaysRemaining;
     private String mId;
     private Uri mMedicationWithId;
     private String uniqueId;
@@ -44,12 +55,48 @@ public class MedicationDetailsActivity extends AppCompatActivity {
         }
 
         displayMedDetails();
-        //mMedImage = findViewById(R.id.med_image);
+        mMedImage = findViewById(R.id.med_image);
         mMedName = findViewById(R.id.med_name);
         mMedDesc = findViewById(R.id.med_desc);
         mMedInterval = findViewById(R.id.med_interval);
         mMedStartDate = findViewById(R.id.med_start_date);
         mMedEndDate = findViewById(R.id.med_end_date);
+        mMedDaysUsed = findViewById(R.id.med_days_used);
+        mMedDaysRemaining = findViewById(R.id.med_days_remaining);
+
+
+        android.support.v7.app.ActionBar actiobar=getSupportActionBar();
+        if (actiobar!=null){
+            actiobar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.details_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        if (id==android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+        }
+        else if (id==R.id.delete_medication){
+            if (mMedicationWithId != null) {
+                getContentResolver().delete(mMedicationWithId,
+                        null,
+                        null);
+                finish();
+            }else{
+                getContentResolver().delete(MedicationContract.MedicationEntry.CONTENT_URI,
+                        MedicationContract.MedicationEntry.UNIQUE_ID + "=?",
+                        new String[] {uniqueId});
+                finish();
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void displayMedDetails(){
@@ -58,7 +105,8 @@ public class MedicationDetailsActivity extends AppCompatActivity {
                 MedicationContract.MedicationEntry.COLUMN_MED_DESC,
                 MedicationContract.MedicationEntry.COLUMN_MED_INTERVAL,
                 MedicationContract.MedicationEntry.COLUMN_START_DATE,
-                MedicationContract.MedicationEntry.COLUMN_END_DATE};
+                MedicationContract.MedicationEntry.COLUMN_END_DATE,
+                MedicationContract.MedicationEntry.COLUMN_IMAGE};
         new FetchMedicationDetails().execute(projection);
 
     }
@@ -78,7 +126,7 @@ public class MedicationDetailsActivity extends AppCompatActivity {
             }else {
                 cursor = getContentResolver().query(MedicationContract.MedicationEntry.CONTENT_URI,
                         projection,
-                        MedicationContract.MedicationEntry.UNIQUE_ID + "?",
+                        MedicationContract.MedicationEntry.UNIQUE_ID + "=?",
                         new String[] {uniqueId},
                         null);
             }
@@ -92,17 +140,48 @@ public class MedicationDetailsActivity extends AppCompatActivity {
                 if (cursor != null) {
                     mMedName.setText(cursor.getString(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_NAME)));
                     mMedDesc.setText(cursor.getString(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_DESC)));
-                    String interval = cursor.getInt(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_NAME)) + " hours";
+                    String interval = String.valueOf(cursor.getInt(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_INTERVAL)));
                     mMedInterval.setText(interval);
-                    String startDate = MedicationDateUtils.getFriendlyDateString(MedicationDetailsActivity.this,
-                            cursor.getLong(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_START_DATE)), true);
+                    String startDate = MedicationDateUtils.dateInNewFormat(
+                            Long.parseLong(cursor.getString(
+                                    cursor.getColumnIndex(
+                                            MedicationContract.MedicationEntry.COLUMN_START_DATE))));
                     mMedStartDate.setText(startDate);
-                    String endDate = MedicationDateUtils.getFriendlyDateString(MedicationDetailsActivity.this,
-                            cursor.getLong(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_END_DATE)), true);
+                    String endDate = MedicationDateUtils.dateInNewFormat(
+                            Long.parseLong(cursor.getString(
+                                    cursor.getColumnIndex(
+                                            MedicationContract.MedicationEntry.COLUMN_END_DATE))));
                     mMedEndDate.setText(endDate);
+                    try {
+                        mMedDaysUsed.setText(MedicationDateUtils.getNumOfDaysUsed(startDate)+"");
+                        mMedDaysRemaining.setText(MedicationDateUtils.getNumOfDaysRemaining(endDate)+"");
+                    } catch (ParseException e) {
+                        Toast.makeText(MedicationDetailsActivity.this, "there was an excepton", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
+                    String filePath = cursor.getString(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_IMAGE));
+                    new decodeByte().execute(filePath);
                 }
             }finally {
                 cursor.close();
+            }
+        }
+    }
+
+
+    class decodeByte extends AsyncTask<String,Void,Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            String filePath = strings[0];
+            Bitmap bImage = BitmapFactory.decodeFile(filePath);
+            return bImage;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (bitmap != null){
+                mMedImage.setImageBitmap(bitmap);
             }
         }
     }

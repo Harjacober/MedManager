@@ -35,7 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="Email Adress"/>
+                android:textColor="#ffffff"
+                android:hint="@string/prompt_email"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -47,7 +48,8 @@
                 android:id="@+id/username_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"/>
+                android:textColor="#ffffff"
+                android:hint="@string/prompt_username"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -60,7 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="Password"/>
+            android:textColor="#ffffff"
+            android:hint="@string/prompt_password"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -73,50 +76,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Confirm Passsword"/>
+                android:textColor="#ffffff"
+                android:hint="@string/prompt_confirm_passsword"/>
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
-    <RelativeLayout
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/sign_up_button"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/sign_up_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="sign up"
-            android:onClick="onSignUpButtonClicked"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp"
-            android:background="#691A99"
-            android:textColor="#ffffff"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/sign_up_button">
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/forgot_pass_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Forgot Password"
-                android:onClick="onForgotPasswordClicked"
-                android:background="#691A99"
-                android:textColor="#ffffff"
-                android:layout_marginRight="5dp"
-                />
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/sign_in_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Sign In"
-                android:onClick="onSignInButtonClicked"
-                android:background="#691A99"
-                android:textColor="#ffffff"
-                android:layout_marginLeft="5dp"/>
-        </LinearLayout>
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up"
+        android:onClick="onSignUpButtonClicked"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp"
+        android:background="#691A99"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:id="@+id/sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/already_registered_sign_in"
+        android:onClick="onSignInTextViewClicked"
+        android:textColor="#ffffff" />
 </LinearLayout>
 </ScrollView>

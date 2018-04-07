@@ -2,10 +2,17 @@ package com.example.original_tech.medmanager.utils;
 
 import android.content.Context;
 import android.text.format.DateUtils;
+import android.util.Log;
+import android.widget.EditText;
 
 import com.example.original_tech.medmanager.R;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
@@ -18,6 +25,7 @@ public class MedicationDateUtils {
     public static final long MINUTE_IN_MILLIS = SECOND_IN_MILLIS * 60;
     public static final long HOUR_IN_MILLIS = MINUTE_IN_MILLIS * 60;
     public static final long DAY_IN_MILLIS = HOUR_IN_MILLIS * 24;
+
 
     /**
      * To make it easy to query for the exact date, we normalize all dates that go into
@@ -183,5 +191,97 @@ public class MedicationDateUtils {
         }else {
             return interval + " times a day";
         }
+    }
+
+    public static void showDate(int year, int month, int day, EditText date) {
+        if(day<10 && month<10){
+            date.setText(new StringBuilder().append(year).
+                    append("/0").append(month).
+                    append("/0").append(day));
+        } else if (month<10){
+            date.setText(new StringBuilder().append(year).
+                    append("/0").append(month).
+                    append("/").append(day));
+        } else if (day<10) {
+            date.setText(new StringBuilder().append(year).
+                    append("/").append(month).
+                    append("/0").append(day));
+        }
+        else {
+            date.setText(new StringBuilder().append(year).
+                    append("/").append(month).
+                    append("/").append(day));
+        }
+    }
+
+    public static String dateInNewFormat(long timeInMillis){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeInMillis);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return String.valueOf(year) +
+                "-" + (month+1) +
+                "-" + day;
+    }
+
+    public static String getMonthFromTimeInMillis(long timeInMillis){
+        String months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+                "Oct", "Nov", "Dec"};
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeInMillis);
+        int month = calendar.get(Calendar.MONTH);
+        return months[month];
+    }
+    /*One might think this method is not advisabe. true. but i will make sure i
+    get rid of all medications seconds before due date at the main activity.*/
+    public static int getNumOfDaysRemaining(String dateHere) throws ParseException {
+        //Format given date
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+        Date parsedDate = ft.parse(dateHere);
+        //convert date to milliseconds
+        int parsedYear, parsedMonth, parsedDay;
+        parsedYear = parsedDate.getYear();
+        parsedMonth = parsedDate.getMonth();
+        parsedDay = parsedDate.getDay();
+        Calendar calendar = new GregorianCalendar(parsedYear, parsedMonth, parsedDay);
+        long parsedDateInMillis = calendar.getTimeInMillis();
+       //Convert current date and time to milliseconds
+        Date date = new Date();
+        Calendar calendar1 = new GregorianCalendar(date.getYear(),
+                date.getMonth(),
+                date.getDay());
+        long currentDateInMillis = calendar1.getTimeInMillis();
+        long interval = parsedDateInMillis - currentDateInMillis;
+        long daysRemaining;
+        daysRemaining = interval / 1000 / 60 / 60 / 24;
+        return (int) daysRemaining;
+    }
+
+    public static int getNumOfDaysUsed(String dateHere) throws ParseException {
+        //Format given date
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+        Date parsedDate = ft.parse(dateHere);
+        //convert date to milliseconds
+        int parsedYear, parsedMonth, parsedDay;
+        parsedYear = parsedDate.getYear();
+        parsedMonth = parsedDate.getMonth();
+        parsedDay = parsedDate.getDay();
+        Calendar calendar = new GregorianCalendar(parsedYear, parsedMonth, parsedDay);
+        long parsedDateInMillis = calendar.getTimeInMillis();
+        //Convert current date and time to milliseconds
+        Date date = new Date();
+        Calendar calendar1 = new GregorianCalendar(date.getYear(),
+                date.getMonth(),
+                date.getDay());
+        long currentDateInMillis = calendar1.getTimeInMillis();
+        long interval = parsedDateInMillis - currentDateInMillis;
+        long daysRemaining;
+        if (interval > 0) {
+            daysRemaining = 0;
+        }else {
+            daysRemaining = (interval * -1) / 1000 / 60 / 60 / 24;
+        }
+        return (int) daysRemaining;
     }
 }

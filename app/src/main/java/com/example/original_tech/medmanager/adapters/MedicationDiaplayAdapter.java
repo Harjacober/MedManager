@@ -34,11 +34,15 @@ public class MedicationDiaplayAdapter extends CursorAdapter {
         TextView medName= view.findViewById(R.id.med_name);
         TextView medDesc= view.findViewById(R.id.med_description);
         TextView medInterval = view.findViewById(R.id.med_interval);
+        ImageView medImage = view.findViewById(R.id.med_image);
 
         medName.setText(cursor.getString(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_NAME)));
         medDesc.setText(cursor.getString(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_DESC)));
         int interval = cursor.getInt(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_MED_INTERVAL));
+        String filePath = cursor.getString(cursor.getColumnIndex(MedicationContract.MedicationEntry.COLUMN_IMAGE));
         String intField = MedicationDateUtils.getReadableMedInterval(interval);
         medInterval.setText(intField);
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        medImage.setImageBitmap(bitmap);
     }
 }

@@ -23,9 +23,11 @@ public class MedicationDbHelper extends SQLiteOpenHelper {
                 + MedicationContract.MedicationEntry.COLUMN_MED_NAME+" TEXT NOT NULL, "
                 + MedicationContract.MedicationEntry.COLUMN_MED_INTERVAL+" INTEGER NOT NULL, "
                 + MedicationContract.MedicationEntry.COLUMN_MED_DESC+" TEXT NOT NULL, "
-                + MedicationContract.MedicationEntry.COLUMN_START_DATE+" INTEGER NOT NULL, "
-                + MedicationContract.MedicationEntry.COLUMN_END_DATE+" INTEGER NOT NULL, "
+                + MedicationContract.MedicationEntry.COLUMN_START_DATE+" TEXT NOT NULL, "
+                + MedicationContract.MedicationEntry.COLUMN_END_DATE+" TEXT NOT NULL, "
                 + MedicationContract.MedicationEntry.UNIQUE_ID+" TEXT NOT NULL, "
+                + MedicationContract.MedicationEntry.COLUMN_IMAGE+" TEXT, "
+                + MedicationContract.MedicationEntry.COLUMN_MONTH+" TEXT, "
                 + MedicationContract.MedicationEntry.COLUMN_PREF_START_TIME+" INTEGER NOT NULL);";
         sqLiteDatabase.execSQL(CREATE_MED_MANAGER_TABLE);
 
