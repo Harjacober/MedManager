@@ -25,8 +25,12 @@ import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.example.original_tech.medmanager.authentication.SignInActivity;
 import com.example.original_tech.medmanager.data.MedicationContract;
+import com.example.original_tech.medmanager.reminder.DemoJobcreator;
+import com.example.original_tech.medmanager.reminder.ShowNotificationJob;
 import com.example.original_tech.medmanager.services.MedicationReminderFirebaseJobService;
 import com.example.original_tech.medmanager.utils.BitmapUtils;
 import com.example.original_tech.medmanager.utils.MedDataUtils;
@@ -68,7 +72,12 @@ public class AddNewMedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_med);
 
+        //create Job Manager Instance
+        JobManager.create(this).addJobCreator(new DemoJobcreator());
+        JobManager.instance().getConfig().setAllowSmallerIntervalsForMarshmallow(true);
+        //request permission if permission not granted
         requestAllPermission();
+        //Find all views by id
         mMedImage = findViewById(R.id.med_image);
         mMedName = findViewById(R.id.med_name);
         mMedDesc = findViewById(R.id.med_desc);
@@ -224,12 +233,13 @@ public class AddNewMedActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        Bundle bundle = new Bundle();
-        bundle.putString("med-name", name);
-        bundle.putString("med-desc", desc);
-        bundle.putString("unique-id", uniqueId);
+       //Remind User about medication
         long duration = mUtcStartDate - System.currentTimeMillis();
-        ReminderUtilities.scheduleMedicationReminder(this, interval, duration, bundle);
+        PersistableBundleCompat bundleCompat = new PersistableBundleCompat();
+        bundleCompat.putString("med-name", name);
+        bundleCompat.putString("med-desc", desc);
+        bundleCompat.putString("unique-id", uniqueId);
+        ShowNotificationJob.schedulePeriodic(duration, bundleCompat);
     }
 
 

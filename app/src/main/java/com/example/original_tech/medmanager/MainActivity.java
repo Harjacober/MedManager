@@ -7,7 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -34,10 +38,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.example.original_tech.medmanager.adapters.MedicationDiaplayAdapter;
 import com.example.original_tech.medmanager.authentication.UserProfileActivity;
 import com.example.original_tech.medmanager.data.MedicationContract;
-import com.example.original_tech.medmanager.utils.ReminderUtilities;
+import com.example.original_tech.medmanager.reminder.DemoJobcreator;
+import com.example.original_tech.medmanager.reminder.ShowNotificationJob;
 
 import java.sql.Timestamp;
 
@@ -59,6 +66,25 @@ AdapterView.OnItemSelectedListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        diableOptimization();//to be removed later
+
+
+
+        JobManager.create(this).addJobCreator(new DemoJobcreator());
+        JobManager.instance().getConfig().setAllowSmallerIntervalsForMarshmallow(true);
+        PersistableBundleCompat bundleCompat = new PersistableBundleCompat();
+        bundleCompat.putString("med-name", "panadol extra");
+        bundleCompat.putString("med-desc", "Take it now");
+        ShowNotificationJob.schedulePeriodic(2, bundleCompat);
+
+
+
+
+
+
+
+
+
         mLoadIndicator = findViewById(R.id.progress_bar);
 
         TextView emptyText = findViewById(R.id.text_view);
@@ -69,8 +95,6 @@ AdapterView.OnItemSelectedListener{
         getSupportLoaderManager().initLoader(PRODUCT_LOADER,null,this);
 
         setListViewListener();
-        //This method will be removed, it's just to test that the job scheduler is working fine
-        ReminderUtilities.scheduleMedicationReminder(this, 8640, 10000, new Bundle());
     }
 
     public void onAddNewMedicationClicked(View view) {
@@ -312,6 +336,19 @@ AdapterView.OnItemSelectedListener{
         protected void onPostExecute(Void  avoid) {
             Toast.makeText(MainActivity.this, "Due Medications has been removed",
                     Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    void diableOptimization(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent();
+            String packageName = getPackageName();
+            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + packageName));
+                startActivity(intent);
+            }
         }
     }
 }

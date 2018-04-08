@@ -2,6 +2,7 @@ package com.example.original_tech.medmanager.utils;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.original_tech.medmanager.MedicationDetailsActivity;
@@ -37,15 +38,15 @@ public class ReminderUtilities {
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(
-                        start(duration),
-                        end(interval, duration)
-                ))
+                        15*60,
+                        15*60*2))
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .setReplaceCurrent(false)
                 .setExtras(bundle)
                 .build();
         firebaseJobDispatcher.mustSchedule(reminderJob);
         Toast.makeText(context, "Reminder Scheduled for this Medication", Toast.LENGTH_SHORT).show();
+//        Log.e("qqqqqqqqq","Id "+(firebaseJobDispatcher.schedule(reminderJob) == SCHEDULE_RESULT_SUCCESS?"Success":"Fail");
         sInitialized = true;
 
     }
