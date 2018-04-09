@@ -66,27 +66,9 @@ AdapterView.OnItemSelectedListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        diableOptimization();//to be removed later
-
-
-
-        JobManager.create(this).addJobCreator(new DemoJobcreator());
-        JobManager.instance().getConfig().setAllowSmallerIntervalsForMarshmallow(true);
-        PersistableBundleCompat bundleCompat = new PersistableBundleCompat();
-        bundleCompat.putString("med-name", "panadol extra");
-        bundleCompat.putString("med-desc", "Take it now");
-        ShowNotificationJob.schedulePeriodic(2, bundleCompat);
-
-
-
-
-
-
-
-
+        disableOptimization();//to be removed later
 
         mLoadIndicator = findViewById(R.id.progress_bar);
-
         TextView emptyText = findViewById(R.id.text_view);
         mDisplayAdapter = new MedicationDiaplayAdapter(this,null);
         mListView = findViewById(R.id.medication_list_view);
@@ -339,7 +321,7 @@ AdapterView.OnItemSelectedListener{
         }
     }
 
-    void diableOptimization(){
+    void disableOptimization(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();
             String packageName = getPackageName();

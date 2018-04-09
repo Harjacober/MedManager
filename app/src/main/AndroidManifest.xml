@@ -24,7 +24,11 @@
             android:launchMode="singleTop">
             <meta-data android:name="android.app.default_searchable"
                 android:value=".data.SearchResultActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".authentication.SignInActivity"
@@ -56,11 +60,7 @@
                 android:resource="@xml/searchable"/>
         </activity>
         <activity android:name=".SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <provider
             android:name=".data.MedicationProvider"

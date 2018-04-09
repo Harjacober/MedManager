@@ -16,6 +16,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,7 +75,6 @@ public class AddNewMedActivity extends AppCompatActivity {
 
         //create Job Manager Instance
         JobManager.create(this).addJobCreator(new DemoJobcreator());
-        JobManager.instance().getConfig().setAllowSmallerIntervalsForMarshmallow(true);
         //request permission if permission not granted
         requestAllPermission();
         //Find all views by id
@@ -183,7 +183,7 @@ public class AddNewMedActivity extends AppCompatActivity {
         }
     };
     private void addMedicationToDatabase() {
-        Timestamp startDateTimeStamp = new Timestamp(mUtcStartDate);
+        Timestamp startDateTimeStamp = new Timestamp(mUtcStartDate + mTimeFromPickerInMillis);
         Timestamp endDateTimeStamp = new Timestamp(mUUtcEndDate);
         String uniqueId = MedDataUtils.generateUniqueidForEachMedication();
         String name = mMedName.getText().toString().trim();
@@ -204,7 +204,10 @@ public class AddNewMedActivity extends AppCompatActivity {
                 TextUtils.isEmpty(mMedEndDate.getText().toString())){
             Toast.makeText(this, "All fields required", Toast.LENGTH_SHORT).show();
 
-        }else if(startDateTimeStamp.after(endDateTimeStamp)
+        }else if (interval > 24){
+            Toast.makeText(this, "interval must not be greater than 24", Toast.LENGTH_SHORT).show();
+        }
+        else if(startDateTimeStamp.after(endDateTimeStamp)
         || startDateTimeStamp.equals(endDateTimeStamp)){
             Toast.makeText(this, "start date must be less than end date", Toast.LENGTH_SHORT).show();
         }else if (endDateTimeStamp.before(new Timestamp(System.currentTimeMillis()))){
@@ -239,7 +242,7 @@ public class AddNewMedActivity extends AppCompatActivity {
         bundleCompat.putString("med-name", name);
         bundleCompat.putString("med-desc", desc);
         bundleCompat.putString("unique-id", uniqueId);
-        ShowNotificationJob.schedulePeriodic(duration, bundleCompat);
+        ShowNotificationJob.schedulePeriodic(15,5, bundleCompat);
     }
 
 

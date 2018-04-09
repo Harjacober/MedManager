@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -49,6 +50,7 @@ public class MedicationDetailsActivity extends AppCompatActivity {
             uniqueId = intent.getStringExtra(NotificationUtils.UNIQUE_ID_KEY);
             initialized = false;
         }
+        Log.i("ppppppppp", initialized + "--" + uniqueId);
 
         displayMedDetails();
         mMedImage = findViewById(R.id.med_image);
