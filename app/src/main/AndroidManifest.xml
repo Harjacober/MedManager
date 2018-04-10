@@ -62,6 +62,12 @@
         <activity android:name=".SplashActivity">
 
         </activity>
+        <receiver android:name=".reminder.AddReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.evernote.android.job.ADD_JOB_CREATOR"/>
+            </intent-filter>
+        </receiver>
         <provider
             android:name=".data.MedicationProvider"
             android:authorities="com.example.original_tech.medmanager"

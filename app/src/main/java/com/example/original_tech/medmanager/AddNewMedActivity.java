@@ -16,7 +16,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,23 +27,18 @@ import android.widget.Toast;
 
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
-import com.example.original_tech.medmanager.authentication.SignInActivity;
 import com.example.original_tech.medmanager.data.MedicationContract;
 import com.example.original_tech.medmanager.reminder.DemoJobcreator;
 import com.example.original_tech.medmanager.reminder.ShowNotificationJob;
-import com.example.original_tech.medmanager.services.MedicationReminderFirebaseJobService;
 import com.example.original_tech.medmanager.utils.BitmapUtils;
 import com.example.original_tech.medmanager.utils.MedDataUtils;
 import com.example.original_tech.medmanager.utils.MedicationDateUtils;
-import com.example.original_tech.medmanager.utils.ReminderUtilities;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class AddNewMedActivity extends AppCompatActivity {
@@ -242,7 +236,8 @@ public class AddNewMedActivity extends AppCompatActivity {
         bundleCompat.putString("med-name", name);
         bundleCompat.putString("med-desc", desc);
         bundleCompat.putString("unique-id", uniqueId);
-        ShowNotificationJob.schedulePeriodic(15,5, bundleCompat);
+        bundleCompat.putInt("interval", interval);
+        ShowNotificationJob.scheduleExact(duration, bundleCompat);
     }
 
 

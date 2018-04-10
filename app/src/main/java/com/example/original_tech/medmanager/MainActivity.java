@@ -38,13 +38,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.example.original_tech.medmanager.adapters.MedicationDiaplayAdapter;
 import com.example.original_tech.medmanager.authentication.UserProfileActivity;
 import com.example.original_tech.medmanager.data.MedicationContract;
-import com.example.original_tech.medmanager.reminder.DemoJobcreator;
-import com.example.original_tech.medmanager.reminder.ShowNotificationJob;
 
 import java.sql.Timestamp;
 

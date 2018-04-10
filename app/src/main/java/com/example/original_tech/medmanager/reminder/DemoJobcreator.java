@@ -13,6 +13,8 @@ public class DemoJobcreator implements JobCreator {
         switch (tag) {
             case ShowNotificationJob.TAG:
                 return new ShowNotificationJob();
+            case ScheduleReminderJob.TAG:
+                return new ScheduleReminderJob();
             default:
                 return null;
         }
