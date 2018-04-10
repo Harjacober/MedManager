@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Original-Tech on 4/10/2018.
  */
-
+// This class displays notification that reminds user to take medication at interval set by user
 public class ScheduleReminderJob extends Job {
 
     public static final String TAG = "schedule-notification-job";

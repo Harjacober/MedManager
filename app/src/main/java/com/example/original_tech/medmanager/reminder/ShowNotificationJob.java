@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Original-Tech on 4/8/2018.
  */
-
+// This schedule the Exact time reminder about notification should start
 public class ShowNotificationJob extends Job {
 
     static final String TAG = "show_notification_job_tag";
