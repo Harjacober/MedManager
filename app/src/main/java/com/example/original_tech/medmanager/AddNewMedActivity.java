@@ -16,6 +16,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
@@ -231,7 +232,8 @@ public class AddNewMedActivity extends AppCompatActivity {
             finish();
         }
        //Remind User about medication
-        long duration = mUtcStartDate - System.currentTimeMillis();
+        long duration = (mUtcStartDate + mTimeFromPickerInMillis) - System.currentTimeMillis();
+        Log.i("luuuuuu", ""+duration);
         PersistableBundleCompat bundleCompat = new PersistableBundleCompat();
         bundleCompat.putString("med-name", name);
         bundleCompat.putString("med-desc", desc);
